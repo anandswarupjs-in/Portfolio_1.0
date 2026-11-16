@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Page not found | ANAND ORIGINALS{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="wrap">
+    <h1>Page not found</h1>
+    <p class="tagline">The page you asked for does not exist or has been moved.</p>
+    <p class="hero-actions"><a class="btn btn-primary" href="{% url 'portfolio:home' %}">Back to home</a>
+    <a class="btn btn-ghost" href="{% url 'portfolio:projects' %}">View projects</a></p>
+  </div>
+</section>
+{% endblock %}

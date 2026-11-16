@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Projects | {{ owner_name }} | ANAND ORIGINALS{% endblock %}
+{% block meta_description %}Software projects by {{ owner_name }}: search by title or description, filter by category and technology.{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="wrap">
+    <h1>Projects</h1>
+    <form id="project-filters" class="filters" method="get" action="{% url 'portfolio:projects' %}" role="search">
+      <div class="field">
+        <label for="f-q">Search</label>
+        <input id="f-q" type="search" name="q" value="{{ q }}" placeholder="Title or description" maxlength="100">
+      </div>
+      <div class="field">
+        <label for="f-category">Category</label>
+        <select id="f-category" name="category">
+          <option value="">All categories</option>
+          {% for key, label in categories %}<option value="{{ key }}"{% if key == category %} selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-tech">Technology</label>
+        <select id="f-tech" name="tech">
+          <option value="">All technologies</option>
+          {% for t in tech_options %}<option value="{{ t }}"{% if t|lower == tech|lower %} selected{% endif %}>{{ t }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-primary" type="submit">Apply</button>
+        <a class="text-link" id="filters-reset" href="{% url 'portfolio:projects' %}">Reset</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% if featured %}
+<section class="section tight" id="featured-block"{% if filters_active %} hidden{% endif %}>
+  <div class="wrap">
+    <h2 class="h-sm">Featured</h2>
+    <div class="card-grid">{% for project in featured %}{% include "_project_card.html" %}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section tight">
+  <div class="wrap">
+    <h2 class="h-sm">All projects <span class="muted" id="result-count">({{ match_count }})</span></h2>
+    <div class="card-grid" id="project-grid">{% for project in projects %}{% include "_project_card.html" %}{% endfor %}</div>
+    <p class="empty" id="empty-state"{% if match_count %} hidden{% endif %}>
+      {% if projects %}No projects match these filters. Reset the filters or try a different search.{% else %}Projects are being added. Check back soon.{% endif %}
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+<article class="project-card" data-search="{{ project.search_blob }}" data-category="{{ project.category }}" data-tech="{{ project.tech_lower }}"{% if project.matches is False %} hidden{% endif %}>
+  <div class="thumb">
+    {% if project.thumbnail %}<img src="{{ project.thumbnail.url }}" alt="{{ project.title }} preview" loading="lazy" width="640" height="400">
+    {% else %}<span class="thumb-fallback" aria-hidden="true">{{ project.title|slice:":1" }}</span>{% endif %}
+  </div>
+  <div class="card-body">
+    <p class="status">{{ project.status }}</p>
+    <h3><a class="card-link" href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+    <p class="card-desc">{{ project.short_description }}</p>
+    <ul class="chips" aria-label="Technologies">{% for t in project.tech_list|slice:":5" %}<li>{{ t }}</li>{% endfor %}</ul>
+    <span class="card-more">View details</span>
+  </div>
+</article>

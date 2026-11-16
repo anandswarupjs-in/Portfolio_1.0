@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="hero-role">{{ owner_title }}</p>
+      <h1 class="hero-name"><span class="name-single">{{ owner_name }}</span></h1>
+      {% if profile.introduction %}<p class="hero-intro redline">{{ profile.introduction }}</p>{% endif %}
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{% url 'portfolio:projects' %}">View projects</a>
+        {% if profile.resume %}<a class="btn btn-ghost" href="{{ profile.resume.url }}" download>Download resume</a>{% endif %}
+      </div>
+      <p class="hero-links">
+        {% if profile.github_url %}<a href="{{ profile.github_url }}" rel="noopener" target="_blank">GitHub</a>{% endif %}
+        {% if profile.linkedin_url %}<a href="{{ profile.linkedin_url }}" rel="noopener" target="_blank">LinkedIn</a>{% endif %}
+      </p>
+    </div>
+    <div class="hero-photo">
+      {% if profile.photo %}<img src="{{ profile.photo.url }}" alt="Portrait of {{ owner_name }}" width="520" height="650">
+      {% else %}<div class="photo-fallback" aria-hidden="true">AO</div>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% if profile.about %}
+<section class="section" id="about">
+  <div class="wrap section-grid">
+    <h2>About</h2>
+    <div>
+      <div class="prose redline">{{ profile.about|linebreaks }}</div>
+      {% if profile.location %}<p class="muted meta-line">Based in {{ profile.location }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if education %}
+<section class="section" id="education">
+  <div class="wrap section-grid">
+    <h2>Education</h2>
+    <ol class="timeline">
+      {% for e in education %}
+      <li>
+        <p class="timeline-years">{{ e.start_year }} to {% if e.end_year %}{{ e.end_year }}{% else %}present{% endif %}</p>
+        <h3>{{ e.qualification }}{% if e.field_of_study %}, {{ e.field_of_study }}{% endif %}</h3>
+        <p class="muted">{{ e.institution }}</p>
+        {% if e.description %}<p class="redline small">{{ e.description }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endif %}
+
+{% if skill_groups %}
+<section class="section" id="skills">
+  <div class="wrap section-grid">
+    <h2>Skills</h2>
+    <div class="skill-groups">
+      {% for label, items in skill_groups %}
+      <div class="skill-group">
+        <h3>{{ label }}</h3>
+        <ul class="chips big">{% for s in items %}<li>{% if s.icon %}<span aria-hidden="true">{{ s.icon }}</span> {% endif %}{{ s.name }}</li>{% endfor %}</ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projects</h2>
+    </div>
+    {% if all_projects %}
+    <div class="card-grid">{% for project in all_projects %}{% include "_project_card.html" %}{% endfor %}</div>
+    {% else %}
+    <p class="empty">Projects are being added. Check back soon.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if achievements or certifications %}
+<section class="section" id="achievements-trainings">
+  <div class="wrap">
+    <h2 class="at-heading">Achievements &amp; Trainings</h2>
+    <div class="at-grid">
+
+      {% if achievements %}
+      <div class="at-col">
+        <h3 class="at-sub">Achievements</h3>
+        <ul class="entries">
+          {% for a in achievements %}
+          <li>
+            <p class="muted small">{{ a.date|date:"F Y" }}{% if a.organization %}, {{ a.organization }}{% endif %}</p>
+            <h4>{{ a.title }}</h4>
+            {% if a.description %}<p class="redline small">{{ a.description }}</p>{% endif %}
+            {% if a.verification_url %}<a class="text-link" href="{{ a.verification_url }}" rel="noopener" target="_blank">Verify</a>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      {% if certifications %}
+      <div class="at-col">
+        <h3 class="at-sub">Trainings</h3>
+        <ul class="entries">
+          {% for c in certifications %}
+          <li>
+            <p class="muted small">{{ c.completion_date|date:"F Y" }}, {{ c.issuing_organization }}</p>
+            <h4>{{ c.title }}</h4>
+            {% if c.description %}<p class="redline small">{{ c.description }}</p>{% endif %}
+            <p class="entry-links">
+              {% if c.credential_url %}<a class="text-link" href="{{ c.credential_url }}" rel="noopener" target="_blank">Verify credential</a>{% endif %}
+              {% if c.certificate_file %}<a class="text-link" href="{{ c.certificate_file.url }}" target="_blank" rel="noopener">View certificate</a>{% endif %}
+            </p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" id="contact">
+  <div class="wrap section-grid">
+    <h2>Contact</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p class="redline">Open to internships, collaborations and conversations about software.</p>
+        <ul class="plain">
+          {% if profile.email %}<li><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>{% endif %}
+          {% if profile.phone %}<li><a href="tel:{{ profile.phone }}">{{ profile.phone }}</a></li>{% endif %}
+          {% if profile.location %}<li class="muted">{{ profile.location }}</li>{% endif %}
+          {% if profile.github_url %}<li><a href="{{ profile.github_url }}" rel="noopener" target="_blank">GitHub: {{ profile.github_username }}</a></li>{% endif %}
+          {% if profile.linkedin_url %}<li><a href="{{ profile.linkedin_url }}" rel="noopener" target="_blank">LinkedIn</a></li>{% endif %}
+        </ul>
+      </div>
+      {% include "_contact_form.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}

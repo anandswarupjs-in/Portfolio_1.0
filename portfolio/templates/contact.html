@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Contact | {{ owner_name }} | ANAND ORIGINALS{% endblock %}
+{% block meta_description %}Get in touch with {{ owner_name }} about internships, collaborations and projects.{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="wrap">
+    <h1>Contact</h1>
+    <p class="tagline">Send a message and it will reach {{ owner_name }} directly.</p>
+  </div>
+</section>
+<section class="section tight">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <ul class="plain">
+        {% if profile.email %}<li><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>{% endif %}
+        {% if profile.github_url %}<li><a href="{{ profile.github_url }}" rel="noopener" target="_blank">GitHub: {{ profile.github_username }}</a></li>{% endif %}
+        {% if profile.linkedin_url %}<li><a href="{{ profile.linkedin_url }}" rel="noopener" target="_blank">LinkedIn</a></li>{% endif %}
+      </ul>
+    </div>
+    {% include "_contact_form.html" %}
+  </div>
+</section>
+{% endblock %}
