@@ -83,6 +83,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
 if os.environ.get("DB_ENGINE", "sqlite").lower() == "mysql":
+    _db_options = {"charset": "utf8mb4"}
+    # TiDB Cloud Serverless requires SSL (port 4000 is a signal it's TiDB)
+    if os.environ.get("DB_PORT", "3306") == "4000":
+        _db_options["ssl"] = {"ssl": True}
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -91,7 +95,7 @@ if os.environ.get("DB_ENGINE", "sqlite").lower() == "mysql":
             "PASSWORD": os.environ.get("DB_PASSWORD", ""),
             "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
             "PORT": os.environ.get("DB_PORT", "3306"),
-            "OPTIONS": {"charset": "utf8mb4"},
+            "OPTIONS": _db_options,
         }
     }
 else:
